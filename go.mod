@@ -1,4 +1,4 @@
-module github.com/chrisrudall/cache
+module github.com/chrisrudall/go-cache
 
 go 1.14
 
