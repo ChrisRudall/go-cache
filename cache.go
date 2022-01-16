@@ -98,7 +98,9 @@ func Get(cachename string, key string) (interface{}, error) {
 
 		cc.Lock.RUnlock()
 
+		var expiredData interface{}
 		cc.Lock.Lock()
+		expiredData = cc.Data[key].item
 		delete(cc.Data, key)
 		cc.Lock.Unlock()
 		logg(fmt.Sprintf("Cleared cache entry with key %v in cache %v due to expiration", key, cachename))
@@ -106,7 +108,7 @@ func Get(cachename string, key string) (interface{}, error) {
 		if loglevel >= 1 {
 			log.Errorf("----->>>>>>> CACHE ITEM EXPIRED: %v %v [now:%v -> exp:%v]", cachename, key, time.Now().Unix(), cc.Data[key].expires)
 		}
-		return nil, errors.New("cache entry has expired")
+		return expiredData, errors.New("cache entry has expired")
 	}
 	logg(fmt.Sprintf("got %s from cache %s", key, cachename))
 	if loglevel >= 1 {
