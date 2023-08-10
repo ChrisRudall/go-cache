@@ -139,6 +139,19 @@ func Purge(cachename string) {
 
 }
 
+// Purge clears entire cache
+func PurgeAll() {
+	logg(fmt.Sprintf("PURGE ALL"))
+
+	cacheListMtx.Lock()
+	defer cacheListMtx.Unlock()
+
+	for c := range caches {
+		delete(caches, c)
+	}
+
+}
+
 // InvalidateItem removes item from cache
 func InvalidateItem(cachename string, key string) error {
 	logg(fmt.Sprintf("invalidate %v %v", cachename, key))
